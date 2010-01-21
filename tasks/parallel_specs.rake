@@ -23,7 +23,8 @@ namespace :parallel do
   [
     ["tests", "test", "test"],
     ["specs", "spec", "spec"],
-    ["cucumber", "feature", "features"]
+    ["cucumber", "feature", "features"],
+    ["testbot_specs", "testbot spec", "testbot_specs"]
   ].each do |lib, name, task|
     desc "run #{name}s in parallel with parallel:#{task}[num_cpus]"
     task task, :count, :path_prefix do |t,args|
