@@ -38,6 +38,10 @@ class ParallelTests
     cmd = "export RAILS_ENV=test ; export TEST_ENV_NUMBER=#{test_env_number(process_number)} ; ruby -Itest -e '[#{require_list}].each {|f| require f }'"
     execute_command(cmd)
   end
+  
+  # Not every implementation will need to prepare, so adding a default "do nothing" method.
+  def self.prepare
+  end
 
   def self.execute_command(cmd)
     f = open("|#{cmd}")

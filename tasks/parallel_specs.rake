@@ -44,6 +44,8 @@ namespace :parallel do
       
       puts "#{num_processes} processes for #{num_tests} #{name}s, ~ #{num_tests / num_processes} #{name}s per process"
 
+      klass.prepare
+
       output = Parallel.in_processes(num_processes) do |process_number|
         klass.run_tests(groups[process_number], process_number)
       end
