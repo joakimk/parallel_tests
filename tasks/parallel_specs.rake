@@ -24,8 +24,8 @@ namespace :parallel do
     ["tests", "test", "test"],
     ["specs", "spec", "spec"],
     ["cucumber", "feature", "features"],
-    ["testbot_specs", "testbot spec", "testbot_specs"]
-  ].each do |lib, name, task|
+    ["testbotspecs", "spec", "testbot_spec", "spec"]
+  ].each do |lib, name, task, path|
     desc "run #{name}s in parallel with parallel:#{task}[num_cpus]"
     task task, :count, :path_prefix do |t,args|
       require File.join(File.dirname(__FILE__), '..', 'lib', "parallel_#{lib}")
@@ -34,9 +34,9 @@ namespace :parallel do
       start = Time.now
 
       num_processes, prefix = ParallelTests.parse_test_args(args)
-      tests_folder = File.join(RAILS_ROOT, task, prefix)
+      tests_folder = File.join(RAILS_ROOT, path ? path : task, prefix)
       groups = klass.tests_in_groups(tests_folder, num_processes)
-
+      
       #adjust processes to groups
       num_processes = [groups.size, num_processes].min
       abort "no #{name}s found!" if num_processes == 0

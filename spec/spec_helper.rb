@@ -5,7 +5,7 @@ require 'rubygems'
 FAKE_RAILS_ROOT = '/tmp/pspecs/fixtures'
 
 require 'parallel_specs'
-require 'parallel_testbot_specs'
+require 'parallel_testbotspecs'
 require 'parallel_cucumber'
 
 def size_of(group)
