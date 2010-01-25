@@ -34,9 +34,10 @@ namespace :parallel do
       start = Time.now
 
       num_processes, prefix = ParallelTests.parse_test_args(args)
+      num_processes = klass.default_process_count(num_processes)
       tests_folder = File.join(RAILS_ROOT, path ? path : task, prefix)
       groups = klass.tests_in_groups(tests_folder, num_processes)
-      
+
       #adjust processes to groups
       num_processes = [groups.size, num_processes].min
       abort "no #{name}s found!" if num_processes == 0

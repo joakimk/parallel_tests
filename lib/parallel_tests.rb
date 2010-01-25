@@ -43,6 +43,11 @@ class ParallelTests
   def self.prepare
   end
 
+  # Not every implementation will need to change the process count
+  def self.default_process_count(current)
+    current
+  end
+
   def self.execute_command(cmd)
     f = open("|#{cmd}")
     all = ''
