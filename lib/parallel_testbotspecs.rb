@@ -25,7 +25,7 @@ class ParallelTestbotspecs < ParallelTests
     system "rake testbot:before_request &> /dev/null; rsync -az --delete -e ssh #{ignores} . #{config.server_path.gsub(":user", ENV['USER'])}"
   end
   
-  def self.default_process_count(current)
+  def self.default_process_count
     TestbotServer.base_uri(config.server_uri)
     TestbotServer.get("/runners/available_instances").to_i * 1.5
   end
