@@ -22,7 +22,7 @@ class ParallelTestbotspecs < ParallelTests
   def self.prepare
     TestbotServer.base_uri(config.server_uri)
     ignores = config.ignores.split.map { |pattern| "--exclude='#{pattern}'" }.join(' ')
-    system "rsync -az --delete -e ssh #{ignores} . #{config.server_path.gsub(":user", ENV['USER'])}"
+    system "rake testbot:before_request &> /dev/null; rsync -az --delete -e ssh #{ignores} . #{config.server_path.gsub(":user", ENV['USER'])}"
   end
   
   protected

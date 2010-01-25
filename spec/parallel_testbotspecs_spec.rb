@@ -54,7 +54,7 @@ describe ParallelTestbotspecs do
                              and_return(OpenStruct.new({ "server_path" => "server:/tmp/testbot/:user",
                                                          "ignores"     => "log/* tmp/*",
                                                          "server_uri"  => "http://testbotserver:5555" }))
-      ParallelTestbotspecs.should_receive(:system).with("rsync -az --delete -e ssh --exclude='log/*' --exclude='tmp/*' . server:/tmp/testbot/#{ENV['USER']}")
+      ParallelTestbotspecs.should_receive(:system).with("rake testbot:before_request &> /dev/null; rsync -az --delete -e ssh --exclude='log/*' --exclude='tmp/*' . server:/tmp/testbot/#{ENV['USER']}")
       ParallelTestbotspecs.prepare
     end
     
