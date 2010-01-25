@@ -3,7 +3,7 @@ require 'parallel'
 class ParallelTests
   # parallel:spec[2,controller] <-> parallel:spec[controller]
   def self.parse_test_args(runner_klass, args)
-    num_processes = klass.default_process_count    
+    num_processes = runner_klass.default_process_count    
     num_processes = Parallel.processor_count unless num_processes
     if args[:count].to_s =~ /^\d*$/ # number or empty
       num_processes = args[:count] unless args[:count].to_s.empty?
