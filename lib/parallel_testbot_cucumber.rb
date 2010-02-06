@@ -5,12 +5,13 @@ class TestbotServer
   include HTTParty
 end  
 
-class ParallelTestbotSpecs < ParallelTests
+# TODO: Extract shared code
+class ParallelTestbotCucumber < ParallelTests
   
   def self.run_tests(test_files, process_number)
     job_id = TestbotServer.post('/jobs', :body => { :root => config.server_path,
                                                     :files => relative_paths(test_files).join(' '),
-                                                    :type => 'rspec' })
+                                                    :type => 'cucumber' })
     results = nil
     loop do
       sleep 1
@@ -34,8 +35,23 @@ class ParallelTestbotSpecs < ParallelTests
   
   protected
 
+  # TODO: Spec
+  def self.test_result_seperator
+    ' '
+  end
+
+  # TODO: Spec
+  def self.line_is_result?(line)
+    line =~ /^\d+ steps/
+  end
+  
+  # TODO: Spec
+  def self.line_is_failure?(line)
+    line =~ /^\d+ steps.*(\d{2,}|[1-9]) failed/
+  end
+
   def self.find_tests(root)
-    Dir["#{root}**/**/*_spec.rb"]
+    Dir["#{root}**/**/*.feature"]
   end
   
   private
