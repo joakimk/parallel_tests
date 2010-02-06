@@ -5,7 +5,7 @@ class TestbotServer
   include HTTParty
 end  
 
-class ParallelTestbotspecs < ParallelTests
+class ParallelTestbotSpecs < ParallelTests
   
   def self.run_tests(test_files, process_number)
     job_id = TestbotServer.post('/jobs', :body => { :root => config.server_path,

@@ -24,12 +24,12 @@ namespace :parallel do
     ["tests", "test", "test"],
     ["specs", "spec", "spec"],
     ["cucumber", "feature", "features"],
-    ["testbotspecs", "spec", "testbot_spec", "spec"]
+    ["testbot_specs", "spec", "testbot_spec", "spec"]
   ].each do |lib, name, task, custom_path|
     desc "run #{name}s in parallel with parallel:#{task}[num_cpus]"
     task task, :count, :path_prefix do |t,args|
       require File.join(File.dirname(__FILE__), '..', 'lib', "parallel_#{lib}")
-      klass = eval("Parallel#{lib.capitalize}")
+      klass = eval("Parallel#{lib.camelize}")
 
       start = Time.now
 
