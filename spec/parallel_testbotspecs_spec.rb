@@ -60,14 +60,14 @@ describe ParallelTestbotspecs do
     
   end
   
-  describe :default_process_count do
+  describe :process_count do
     
-    it "should query the server for the number of available_instances and return 1.5 times that" do
+    it "should query the server for the number of available_instances return it" do
       TestbotServer.should_receive(:base_uri).with("http://testbotserver:5555")
       ParallelTestbotspecs.stub!(:config).
                              and_return(OpenStruct.new({ "server_uri"  => "http://testbotserver:5555" }))
       TestbotServer.should_receive(:get).with('/runners/available_instances').and_return('10')
-      ParallelTestbotspecs.default_process_count.should == 15
+      ParallelTestbotspecs.process_count.should == 10
     end
     
   end

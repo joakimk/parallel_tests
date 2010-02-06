@@ -3,8 +3,7 @@ require 'parallel'
 class ParallelTests
   # parallel:spec[2,controller] <-> parallel:spec[controller]
   def self.parse_test_args(runner_klass, args)
-    num_processes = runner_klass.default_process_count    
-    num_processes = Parallel.processor_count unless num_processes
+    num_processes = runner_klass.process_count
     if args[:count].to_s =~ /^\d*$/ # number or empty
       num_processes = args[:count] unless args[:count].to_s.empty?
       prefix = args[:path_prefix]
@@ -44,9 +43,8 @@ class ParallelTests
   def self.prepare
   end
 
-  # Not every implementation will need to override the process count
-  def self.default_process_count
-    nil
+  def self.process_count
+    Parallel.processor_count
   end
 
   def self.execute_command(cmd)
