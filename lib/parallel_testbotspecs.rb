@@ -17,6 +17,7 @@ class ParallelTestbotspecs < ParallelTests
       break if results != nil
     end
     puts results
+    results
   end
   
   def self.prepare

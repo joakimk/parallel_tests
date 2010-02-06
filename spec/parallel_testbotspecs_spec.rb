@@ -18,7 +18,7 @@ describe ParallelTestbotspecs do
                              :files => 'xxx yyy' }).and_return(5)
       TestbotServer.should_receive(:get).with('/jobs/5').and_return('test-results')
       ParallelTestbotspecs.should_receive(:puts).with('test-results')
-      ParallelTestbotspecs.run_tests([ 'xxx', 'yyy' ], 1).should
+      ParallelTestbotspecs.run_tests([ 'xxx', 'yyy' ], 1).should == 'test-results'
     end
     
     it "should not return until a result has been given" do
