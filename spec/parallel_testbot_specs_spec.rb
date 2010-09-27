@@ -17,7 +17,7 @@ describe ParallelTestbotSpecs do
                   :body => { :root => "server:/tmp/testbot/:user",
                              :files => 'xxx yyy',
                              :type => 'rspec',
-                             :root_type => 'rsync' }).and_return(5)
+                             :server_type => 'rsync' }).and_return(5)
       TestbotServer.should_receive(:get).with('/jobs/5').and_return('test-results')
       ParallelTestbotSpecs.should_receive(:puts).with('test-results')
       ParallelTestbotSpecs.run_tests([ 'xxx', 'yyy' ], 1).should == 'test-results'
@@ -42,10 +42,23 @@ describe ParallelTestbotSpecs do
                   :body => { :root => "server:/tmp/testbot/:user",
                              :files => 'spec/models/car_spec.rb',
                              :type => 'rspec',
-                             :root_type => 'rsync' }).and_return(10)
+                             :server_type => 'rsync' }).and_return(10)
       TestbotServer.stub!(:post).and_return(10)
       TestbotServer.stub!(:get).and_return('results')
       ParallelTestbotSpecs.run_tests([ "#{FileUtils.pwd}/spec/models/car_spec.rb" ], 1)      
+    end
+    
+    it "should use a different server_type if specifed" do
+      ParallelTestbotSpecs.stub!(:config).
+                             and_return(OpenStruct.new({ "server_path" => "server:/tmp/testbot/:user", "server_type" => "git" }))
+      TestbotServer.should_receive(:post).with('/jobs',
+                  :body => { :root => "server:/tmp/testbot/:user",
+                             :files => 'xxx yyy',
+                             :type => 'rspec',
+                             :server_type => 'git' }).and_return(5)
+      TestbotServer.stub!(:post).and_return(5)
+      TestbotServer.stub!(:get).and_return('results')
+      ParallelTestbotSpecs.run_tests([ 'xxx', 'yyy' ], 1).should == 'results'
     end
   
   end
@@ -59,6 +72,12 @@ describe ParallelTestbotSpecs do
                                                          "ignores"     => "log/* tmp/*",
                                                          "server_uri"  => "http://testbotserver:5555" }))
       ParallelTestbotSpecs.should_receive(:system).with("rake testbot:before_request &> /dev/null; rsync -az --delete -e ssh --exclude='log/*' --exclude='tmp/*' . server:/tmp/testbot/#{ENV['USER']}")
+      ParallelTestbotSpecs.prepare
+    end
+    
+    it "should not rsync files if the server_type is not rsync" do
+      ParallelTestbotSpecs.stub!(:config).and_return(OpenStruct.new({ "server_type" => "git" }))
+      ParallelTestbotSpecs.should_not_receive(:system)
       ParallelTestbotSpecs.prepare
     end
     

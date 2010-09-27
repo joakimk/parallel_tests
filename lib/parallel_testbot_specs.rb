@@ -11,7 +11,7 @@ class ParallelTestbotSpecs < ParallelTests
     job_id = TestbotServer.post('/jobs', :body => { :root => config.server_path,
                                                     :files => relative_paths(test_files).join(' '),
                                                     :type => 'rspec',
-                                                    :root_type => 'rsync' })
+                                                    :server_type => config.server_type || 'rsync' })
     results = nil
     loop do
       sleep 1
@@ -23,6 +23,7 @@ class ParallelTestbotSpecs < ParallelTests
   end
   
   def self.prepare
+    return if config.server_type && config.server_type != 'rsync'
     TestbotServer.base_uri(config.server_uri)
     ignores = config.ignores.split.map { |pattern| "--exclude='#{pattern}'" }.join(' ')
     system "rake testbot:before_request &> /dev/null; rsync -az --delete -e ssh #{ignores} . #{config.server_path.gsub(":user", ENV['USER'])}"
