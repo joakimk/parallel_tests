@@ -11,7 +11,8 @@ class ParallelTestbotCucumber < ParallelTests
   def self.run_tests(test_files, process_number)
     job_id = TestbotServer.post('/jobs', :body => { :root => config.server_path,
                                                     :files => relative_paths(test_files).join(' '),
-                                                    :type => 'cucumber' })
+                                                    :type => 'cucumber',
+                                                    :root_type => 'rsync' })
     results = nil
     loop do
       sleep 1

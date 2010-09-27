@@ -16,7 +16,8 @@ describe ParallelTestbotCucumber do
       TestbotServer.should_receive(:post).with('/jobs',
                   :body => { :root => "server:/tmp/testbot/:user",
                              :files => 'xxx yyy',
-                             :type => 'cucumber' }).and_return(5)
+                             :type => 'cucumber',
+                             :root_type => 'rsync' }).and_return(5)
       TestbotServer.should_receive(:get).with('/jobs/5').and_return('test-results')
       ParallelTestbotCucumber.should_receive(:puts).with('test-results')
       ParallelTestbotCucumber.run_tests([ 'xxx', 'yyy' ], 1).should == 'test-results'
@@ -40,7 +41,8 @@ describe ParallelTestbotCucumber do
       TestbotServer.should_receive(:post).with('/jobs',
                   :body => { :root => "server:/tmp/testbot/:user",
                              :files => 'features/somewhere/car.feature',
-                             :type => 'cucumber' }).and_return(10)      
+                             :type => 'cucumber',
+                             :root_type => 'rsync' }).and_return(10)
       TestbotServer.stub!(:post).and_return(10)
       TestbotServer.stub!(:get).and_return('results')
       ParallelTestbotCucumber.run_tests([ "#{FileUtils.pwd}/features/somewhere/car.feature" ], 1)

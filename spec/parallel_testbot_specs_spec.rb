@@ -16,7 +16,8 @@ describe ParallelTestbotSpecs do
       TestbotServer.should_receive(:post).with('/jobs',
                   :body => { :root => "server:/tmp/testbot/:user",
                              :files => 'xxx yyy',
-                             :type => 'rspec' }).and_return(5)
+                             :type => 'rspec',
+                             :root_type => 'rsync' }).and_return(5)
       TestbotServer.should_receive(:get).with('/jobs/5').and_return('test-results')
       ParallelTestbotSpecs.should_receive(:puts).with('test-results')
       ParallelTestbotSpecs.run_tests([ 'xxx', 'yyy' ], 1).should == 'test-results'
@@ -40,7 +41,8 @@ describe ParallelTestbotSpecs do
       TestbotServer.should_receive(:post).with('/jobs',
                   :body => { :root => "server:/tmp/testbot/:user",
                              :files => 'spec/models/car_spec.rb',
-                             :type => 'rspec' }).and_return(10)
+                             :type => 'rspec',
+                             :root_type => 'rsync' }).and_return(10)
       TestbotServer.stub!(:post).and_return(10)
       TestbotServer.stub!(:get).and_return('results')
       ParallelTestbotSpecs.run_tests([ "#{FileUtils.pwd}/spec/models/car_spec.rb" ], 1)      

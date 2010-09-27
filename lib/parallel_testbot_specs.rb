@@ -10,7 +10,8 @@ class ParallelTestbotSpecs < ParallelTests
   def self.run_tests(test_files, process_number)
     job_id = TestbotServer.post('/jobs', :body => { :root => config.server_path,
                                                     :files => relative_paths(test_files).join(' '),
-                                                    :type => 'rspec' })
+                                                    :type => 'rspec',
+                                                    :root_type => 'rsync' })
     results = nil
     loop do
       sleep 1
