@@ -36,7 +36,7 @@ class ParallelTestbot < ParallelTests
     # When several requesters try to start jobs at the same time, its useful to know how many
     # instances there are in total so that you can use "available_runner_usage" to limit usage for each requester.
     # Because of this we specify last_seen=20.
-    available_instances = TestbotServer.get("/runners/available_instances?last_seen=20").to_i
+    available_instances = TestbotServer.get("/runners/total_instances").to_i
     
     if config.available_runner_usage
       (available_instances * (config.available_runner_usage.to_i / 100.0)).to_i

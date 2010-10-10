@@ -89,7 +89,7 @@ describe ParallelTestbotSpecs do
       TestbotServer.should_receive(:base_uri).with("http://testbotserver:5555")
       ParallelTestbotSpecs.stub!(:config).
                              and_return(OpenStruct.new({ "server_uri"  => "http://testbotserver:5555" }))
-      TestbotServer.should_receive(:get).with('/runners/available_instances?last_seen=20').and_return('10')
+      TestbotServer.should_receive(:get).with('/runners/total_instances').and_return('10')
       ParallelTestbotSpecs.process_count.should == 10
     end
     
@@ -97,7 +97,7 @@ describe ParallelTestbotSpecs do
       TestbotServer.should_receive(:base_uri).with("http://testbotserver:5555")
       ParallelTestbotSpecs.stub!(:config).
                              and_return(OpenStruct.new({ "server_uri"  => "http://testbotserver:5555", "available_runner_usage" => "70%" }))
-      TestbotServer.should_receive(:get).with('/runners/available_instances?last_seen=20').and_return('10')
+      TestbotServer.should_receive(:get).with('/runners/total_instances').and_return('10')
       ParallelTestbotSpecs.process_count.should == 7
     end    
     
