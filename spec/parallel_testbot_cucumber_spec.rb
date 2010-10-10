@@ -89,8 +89,16 @@ describe ParallelTestbotCucumber do
       TestbotServer.should_receive(:base_uri).with("http://testbotserver:5555")
       ParallelTestbotCucumber.stub!(:config).
                              and_return(OpenStruct.new({ "server_uri"  => "http://testbotserver:5555" }))
-      TestbotServer.should_receive(:get).with('/runners/available_instances').and_return('10')
+      TestbotServer.should_receive(:get).with('/runners/available_instances?last_seen=20').and_return('10')
       ParallelTestbotCucumber.process_count.should == 10
+    end
+    
+    it "should return only the part of the available instances that the config specifies" do
+      TestbotServer.should_receive(:base_uri).with("http://testbotserver:5555")
+      ParallelTestbotCucumber.stub!(:config).
+                             and_return(OpenStruct.new({ "server_uri"  => "http://testbotserver:5555", "available_runner_usage" => "70%" }))
+      TestbotServer.should_receive(:get).with('/runners/available_instances?last_seen=20').and_return('10')
+      ParallelTestbotCucumber.process_count.should == 7
     end
     
   end
